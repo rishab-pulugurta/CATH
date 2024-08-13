@@ -116,11 +116,15 @@ The goal of this model is to make as many correct classifications as possible, g
 
 **Experiments**:
 
-
+![Evaluation Experiments](https://github.com/rishab-pulugurta/medium-bio-challenge/blob/main/evaluation.png)
 
 The experiments conducted can be seen in the table. 
 
 The different methods of encoding and clustering the training data had a significant impact on model performance. When using one-hot encoding for sequence data, both the Sequence-Only and Struct+Seq models achieved lower accuracies, 0.32 and 0.28, respectively, indicating that one-hot encoding cannot capture the complexities of the data effectively. In contrast, using ESM embeddings led to a substantial increase in accuracy for both the Sequence-Only model, from 0.32 to 0.68, and the Struct+Seq model. from 0.28 to 0.74, highlighting the effectiveness of ESM in capturing more sequence-rich features. Additionally, clustering the data using MMSeq resulted in higher accuracy (0.74) compared to a random split (0.64), suggesting that clustering with MMSeq provides more meaningful groupings that enhance model performance, creating a representative training and validation set.
+
+**Analysis**:
+
+
 
 
 
