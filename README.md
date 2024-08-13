@@ -124,6 +124,39 @@ The different methods of encoding and clustering the training data had a signifi
 
 **Analysis**:
 
+Strengths:
+
+Integration of Sequence and Structure Data: The Seq-Struct model combines both sequence and structure data using self-attention mechanisms, which allows it to capture rich and contextually relevant features from both sequence and structural data. This dual-attention approach enhances the model's ability to learn complex relationships in the data, leading to improved performance, particularly when both types of information are essential. 
+
+Generalizability: The use of self-attention for both sequence and structure data allows the model to be flexible and applicable to various tasks where these types of data are available. The model is likely to generalize well to similar datasets, particularly those that include both sequence and structure information.
+
+Scalability: The architecture can scale with larger datasets and more complex tasks by increasing the number of attention heads or the depth of the network. Additionally, the model's modular design using attention on structure and sequence separately makes it easier to adapt to different data types, such as using only one or the other, or more complex tasks without needing significant architectural changes.
+
+
+Weaknesses:
+
+Dependence on Embeddings: The model's performance heavily depends on the quality of the input embeddings. While ESM-2 has been proven in literature to be highly effective at capturing sequence representations, a newly-trained GNN, as used in this model, may not capture effective structural embeddings. Poor quality embeddings or noisy data can significantly degrade the model's performance, limiting its generalizability.
+
+Multi-Step Process: The process of first embedding the sequence and structural data separately before being integrated in the model may be a bit inconvenient and could increase complexity, and could potentially work better if integrated directly into the testing loop.
+
+The model tended to fail in terms of achieving any successful results past a certain threshold of accuracy, which is most likely due to the limitations of the added structural embeddings and limited data availibility. Because of how complex structural data from PDBs may be, simply capturing edge/connections data along with atom coordinates may not be enough to capture effective structure representations, which will lead to a poorly trained GNN. In addition, the initial dataset itself was slightly flawed, as during cleaning, it was noticed some of the original sequences did not match CATH domain when solely using the CATH indices on the full sequence fetched from RCSB PDB or UniProt, and there were only ~6000 training samples, which may not be enough to train a model of this scale effectively. However, the addition of structure embeddings still was able to allow the model to learn more information from the data, as seen in the performance increases, which goes to show the potential of improvements when adding even more established structural data, such as rotational information and other translational data from the space of the 3D structure.
+
+**Future Work**:
+
+Utilizing an IPA Transformer for Improved Structural Embeddings:
+
+An Invariant Point Attention (IPA) Transformer is designed specifically for tasks that involve 3D structures, such as protein modeling. IPA Transformers have been shown to effectively capture complex spatial relationships and invariant features, making them ideal for generating high-quality structural embeddings, as this is exactly what is used in AlphaFold2 before finally generating a structure prediction. This architecture takes in far more complex structural data, such as rotation matrices, pairwise distances, angles, and translatiton vectors, which creates a far more structrally-rich conditioned embedding for use. 
+
+Leveraging Inverse Folding for Refining Structural Embeddings:
+
+Inverse folding refers to the process of determining the sequence that best fits a given protein structure, essentially the reverse of the typical sequence-to-structure prediction. By integrating inverse folding into the model, it would be possible to refine structural embeddings, ensuring that they not only represent the 3D conformation but also encapsulate the sequence information that corresponds to that structure. 
+
+Enhancing Joint Representation:
+
+Rather than simply concatenating the structural and sequence embeddings, it would very interesting to try an approach that effectively combines both embeddings in a latent space and does further transormations on this joint embedding. A new generative architecture in literature that has been very effective in certain protein models has been flow matching, which involves training a flow-based model to learn a transformation between a simple distribution, which can just be modeled as a simple Gaussian distribution, and a more complex distribution, such as our joint embeddings of structure and sequence data. This can result in a more feature-rich final embedding to be used for further downstream tasks, such as out CATH architecture classification prediction, but also  when combined with other data, can be used in designing structural binders, backbones, and other molecules.
+
+
+
 
 
 
