@@ -16,6 +16,8 @@ For structural data, a script was written where all PDBs were processed and the 
 
 **Model**:
 
+![Seq+Struct Architecture](https://github.com/rishab-pulugurta/medium-bio-challenge/blob/main/architecture.png)
+
 **Sequence Model**: 
 
 The solely sequence-based model is designed to classify the CATH architecture of protein sequences based on their ESM-2 embeddings. The architecture consists of the following       components:
