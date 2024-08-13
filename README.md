@@ -11,6 +11,8 @@ In order to create an effective and representative train/validation split, seque
 
 Finally, after all this initial data-processing was done, duplicate sequences were removed, and the dataset was checked for any NaN or missing values in any column, and if any were found, those rows were subsequently removed.
 
+For structural data, a script was written where all PDBs were processed and the atom coordinates and edges were determined for each file and added into the final dataframe. 
+
 
 **Model**:
 
@@ -46,6 +48,41 @@ The goal of this model is to make as many correct classifications as possible, g
 
 
 Structure Model:
+
+The structure-model is a GNN-based model which was designed using Graph Attention Networks (GATs) in order to generate meaningful embeddings from the generated structural data froom the PDBs. While designed as a classifier, the model was used to extract structure-rich embeddings before the final classification layer. The architecture consists of the following components:
+
+Graph Attention Network (GAT) Layers:
+
+GATConv Layers: The model uses three GAT convolutional layers (conv1, conv2, and conv3). These layers apply attention mechanisms over graph nodes, allowing the model to focus on the most relevant neighboring nodes when updating each node's features. The GAT layers allow the model to learn which nodes in the graph are most relevant for determining each node's feature, providing a form of context-dependent feature extraction that is well-suited for graphs and it creates structure-awareness, as the model is explicitly designed to work with graph-structured data, making it aware of the relationships between nodes. After the last GAT layer, the model uses global max pooling to aggregate node features across the entire graph into a single vector for each graph in the batch. This pooled vector is then used as the input to the fully connected layers.
+
+Skip Connections: The model employs skip connections (residual connections) after each GAT layer, helping to preserve information from earlier layers, mitigating the vanishing gradient problem, and improving gradient flow during training.
+
+Fully Connected Layers:
+
+After the GAT layers, the model has three fully connected layers, which take the pooled graph representation and further transform it. These layers reduce the dimensionality step by step until reaching the desired output size.
+Layer 1: Takes the output from the global max pooling operation and applies a linear transformation followed by a ReLU activation function, reducing the dimensionality to 320.
+Layer 2: Further reduces the dimensionality to 128 with another linear transformation and ReLU activation.
+Layer 3: The final layer maps the output to the number of classes, which represents the different possible classifications or categories the structural data can be mapped to. 
+However, the output of interest for this purpose is the intermediate representation 'x' obtained after global max pooling and before passing through the fully connected layers, as we only need the embeddings. 
+
+
+Loss: Cross-Entropy Loss
+
+The loss function used in this model was Cross-Entropy Loss, which measures the difference between the predicted probability distribution over classes and the true distribution. The softmax function is applied to the logits at the end of the fully-connected layers to convert them into a probability distribution over the classes, and then loss is calculated between the predicted and true labels.
+
+Optimizer: Adam
+
+This model used the Adam optimizer, which is very commonly used in literature when training complex neural networks. It adapts the learning rate for each parameter individually, which is useful for noisy or sparse gradients, and it can help the model converge faster and more efficiently. Compared to other optimization algorithms, it is also relatively computaionally inexpensive, and its momentum calculation can help gradients converge faster as well.
+
+Performance: Accuracy 
+
+The goal of this model is to make as many correct classifications as possible, given structural data. Therefore, accuracy was used as the main performancce metric on the validation set of the model, which shows the total number of correct predictions as a percentage of the total number of predictions made. Even though this was not the main purpose of this model, it proves that we are generating meaningful structurally-conditioned embeddings for use. 
+
+
+Sequence+Structure Model:
+
+
+
 
 
 
