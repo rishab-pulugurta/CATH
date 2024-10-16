@@ -1,4 +1,4 @@
-# Medium-Biosciences-Challenge: Structure-Conditioned Classification of CATH Domain Architecture from Protein Sequence
+# Structure-Conditioned Classification of CATH Domain Architecture from Protein Sequence
 
 For a quick overview before the written report: The 3 model checkpoints (Sequence Model, Sequence+Structure Model, GNN(For Struct Embeddings)) are all in the "checkpoints" folder. The final cleaned dataset that was used for training is in the "datasets" folder. The sequence and structure embeddings saved for training the models are in the "embeddings" folder. Finally, the 2 models, sequence_model.ipynb and seq_struct_model.ipynb, along with development.ipynb, which is all the code used for development (data cleaning, handling missing amino acids, homology clustering, training, etc...), are in the "models" folder. The paths are set to work when running in the repository, however, if being run on CoLab or something else, they may need to be changed. These same files are all in the shared Google Drive folder as well. 
 
